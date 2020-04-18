@@ -18,7 +18,7 @@ var uploads = multer({ storage: storage });
 app.use("/files", express.static("files"));
 app.get("/", (req, res) => res.send("Hello World!"));
 app.post("/upload", uploads.single("file"), function (req, res) {
-  baseurl = "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com";
+  baseurl = "https://rekt-files.herokuapp.com";
   res.send(baseurl + "/files/" + res.req.file.filename);
 });
 

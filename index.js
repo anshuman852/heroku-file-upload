@@ -29,11 +29,6 @@ app.post('/upload', uploads.single('file'), function (req, res) {
   res.send(baseurl + res.req.file.filename)
 })
 
-<<<<<<< HEAD
-
-port = process.env.PORT || 8080
-app.use('/', router)
-=======
 var uploads = multer({ storage: storage });
 app.use(express.static("files"));
 app.get("/", (req, res) => res.sendFile(path.join(__dirname+'/index.html')));
@@ -44,7 +39,6 @@ app.post("/upload", uploads.single("file"), function (req, res) {
 app.get("/upload", (req, res) => res.sendFile(path.join(__dirname+'/index.html')));
 port = process.env.PORT || 8080;
 app.use("/",router)
->>>>>>> beb65435ddaf200facd8da5d430978224fbc70cc
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 )

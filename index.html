@@ -20,23 +20,34 @@
 			copyText.select();
 			copyText.setSelectionRange(0, 99999); /*For mobile devices*/
 			document.execCommand("copy");
-			
+
 		}
 
-		$(document).ready(function () {
+		$(document).ready(() => {
 			$("#result").hide()
-			$("#upload-form").submit(function (event) {
+			$("#upload-form").submit((event) => {
 				event.preventDefault();
 				var form = $("#upload-form");
 				var formData = new FormData(form[0]);
 				$.ajax({
+					xhr: () => {
+						var xhr = new window.XMLHttpRequest();
+						xhr.upload.addEventListener("progress", (evt) => {
+							if (evt.lengthComputable) {
+								var percentComplete = evt.loaded / evt.total;
+								$(".progress-bar").css("width", percentComplete * 100 + "%").text(percentComplete * 100 + " %");
+								if (percentComplete === 1)
+									$("#result").show()
+							}
+						}, false);
+						return xhr;
+					},
 					method: 'post',
 					url: '/upload',
 					data: formData,
 					processData: false,
 					contentType: false,
-					success: function (data) {
-						$("#result").show()
+					success: (data) => {
 						$('#url').val(data)
 					}
 
@@ -45,8 +56,11 @@
 		});
 		$(function () {
 			$('input:file').change(function () {
-				if (this.value.length > 0)
+				if (this.value.length > 0) {
 					document.getElementById('upbtn').disabled = false;
+					$('#loadFileXml').val(document.getElementById('file').files[0].name)
+				}
+
 				else
 					document.getElementById('upbtn').disabled = true;
 			});
@@ -66,22 +80,29 @@
 
 			<form id="upload-form" enctype="multipart/form-data" method="POST">
 				<!-- file select elements -->
-				<div style="padding: 10px 10px 10px 10px;">
+				<div style="padding: 10px;">
 					<input type="button" id="loadFileXml" value="Select File" class="btn btn-primary btn-block"
 						onclick="document.getElementById('file').click()" />
 					<input type="file" style="display: none;" id="file" name="file" />
 				</div>
 
 				<!-- file upload button -->
-				<div style="padding: 10px 10px 10px 10px;">
+				<div style="padding: 10px;">
 					<button type="submit" id="upbtn" class="btn btn-danger btn-block" disabled="true"
 						value="Upload a file">
 						Upload File
 					</button>
 				</div>
-				<div class="row" id="result" style="margin: 10px;">
-					<input  type="text" class="form-control" id="url">
-					<button style="margin-top: 10px;" class="btn btn-secondary" type="button"  onclick="copyLink()">Copy text</button>
+				<div class="progress" style="margin: 10px 10px 10px 10px;">
+					<div class="progress-bar progress-bar-striped bg-success active" role="progressbar"
+						aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+						0%
+					</div>
+				</div>
+				<div class="row" id="result" style="margin: 10px ;">
+					<input type="text" class="form-control" id="url">
+					<button style="margin-top: 10px;" class="btn btn-secondary" type="button" onclick="copyLink()">Copy
+						text</button>
 				</div>
 
 			</form>

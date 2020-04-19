@@ -27,7 +27,7 @@ app.post("/upload", uploads.single("file"), function (req, res) {
   baseurl = "https://rekt-files.herokuapp.com/";
   res.send(baseurl + res.req.file.filename);
 });
-
+app.get("/upload", (req, res) => res.sendFile(path.join(__dirname+'/index.html')));
 port = process.env.PORT || 8080;
 app.use("/",router)
 app.listen(port, () =>

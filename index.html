@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-<<<<<<< HEAD
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>File Uploader</title>
@@ -16,6 +15,34 @@
 		}
 	</style>
 	<script>
+		function copyLink() {
+			var copyText = document.getElementById("url");
+			copyText.select();
+			copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+			document.execCommand("copy");
+			
+		}
+
+		$(document).ready(function () {
+			$("#result").hide()
+			$("#upload-form").submit(function (event) {
+				event.preventDefault();
+				var form = $("#upload-form");
+				var formData = new FormData(form[0]);
+				$.ajax({
+					method: 'post',
+					url: '/upload',
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function (data) {
+						$("#result").show()
+						$('#url').val(data)
+					}
+
+				})
+			});
+		});
 		$(function () {
 			$('input:file').change(function () {
 				if (this.value.length > 0)
@@ -28,22 +55,33 @@
 </head>
 
 <body>
+	<!-- nav bar  -->
 	<nav class="navbar navbar-dark bg-dark">
 		<a class="navbar-brand font-weight-bold" href="#">Heroku File Uploader</a>
 	</nav>
+
+	<!-- app body  -->
 	<div class="jumbotron d-flex align-items-center" style="height: 100%;">
 		<div class="container" style="padding: 50px 50px 50px 50px">
-			<form action="/upload" enctype="multipart/form-data" method="POST">
+
+			<form id="upload-form" enctype="multipart/form-data" method="POST">
+				<!-- file select elements -->
 				<div style="padding: 10px 10px 10px 10px;">
 					<input type="button" id="loadFileXml" value="Select File" class="btn btn-primary btn-block"
 						onclick="document.getElementById('file').click()" />
 					<input type="file" style="display: none;" id="file" name="file" />
 				</div>
+
+				<!-- file upload button -->
 				<div style="padding: 10px 10px 10px 10px;">
 					<button type="submit" id="upbtn" class="btn btn-danger btn-block" disabled="true"
 						value="Upload a file">
 						Upload File
 					</button>
+				</div>
+				<div class="row" id="result" style="margin: 10px;">
+					<input  type="text" class="form-control" id="url">
+					<button style="margin-top: 10px;" class="btn btn-secondary" type="button"  onclick="copyLink()">Copy text</button>
 				</div>
 
 			</form>
@@ -53,51 +91,3 @@
 </body>
 
 </html>
-=======
-    <title>Ensumon File upload</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-        $(document).ready(
-    function(){
-        $('input:file').change(
-            function(){
-                if ($(this).val()) {
-                    $('input:submit').attr('disabled',false);
-                    // or, as has been pointed out elsewhere:
-                    // $('input:submit').removeAttr('disabled'); 
-                } 
-            }
-            );
-    });
-        </script>
-<form id "uploadform" action="/upload" enctype="multipart/form-data" method="POST">
-    <input type="file" name="file" id="fileInput" />
-    <input id="uploadbtn" type="submit" value="submit" disabled />
-</form>
-<div id="result"></div>
-<script type="text/javascript">
-$(document).ready(function(){
-    $('#uploadbtn').on('click',function(e){ 
-        $('result').html("")
-        e.preventDefault();
-        var formData = new FormData();
-        formData.append('file', $('input[type=file]')[0].files[0]); 
-        $.ajax({
-            url: '/upload',  
-            type: 'POST',
-            data: formData,
-            success:function(data){
-                $('#result').html(data);
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-    });
-});
-
-
-</script>
->>>>>>> beb65435ddaf200facd8da5d430978224fbc70cc

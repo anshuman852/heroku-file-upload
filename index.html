@@ -1,4 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
+<<<<<<< HEAD
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>File Uploader</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<style>
+		html,
+		body {
+			height: 100%;
+		}
+	</style>
+	<script>
+		$(function () {
+			$('input:file').change(function () {
+				if (this.value.length > 0)
+					document.getElementById('upbtn').disabled = false;
+				else
+					document.getElementById('upbtn').disabled = true;
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<nav class="navbar navbar-dark bg-dark">
+		<a class="navbar-brand font-weight-bold" href="#">Heroku File Uploader</a>
+	</nav>
+	<div class="jumbotron d-flex align-items-center" style="height: 100%;">
+		<div class="container" style="padding: 50px 50px 50px 50px">
+			<form action="/upload" enctype="multipart/form-data" method="POST">
+				<div style="padding: 10px 10px 10px 10px;">
+					<input type="button" id="loadFileXml" value="Select File" class="btn btn-primary btn-block"
+						onclick="document.getElementById('file').click()" />
+					<input type="file" style="display: none;" id="file" name="file" />
+				</div>
+				<div style="padding: 10px 10px 10px 10px;">
+					<button type="submit" id="upbtn" class="btn btn-danger btn-block" disabled="true"
+						value="Upload a file">
+						Upload File
+					</button>
+				</div>
+
+			</form>
+		</div>
+	</div>
+
+</body>
+
+</html>
+=======
     <title>Ensumon File upload</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -45,3 +100,4 @@ $(document).ready(function(){
 
 
 </script>
+>>>>>>> beb65435ddaf200facd8da5d430978224fbc70cc

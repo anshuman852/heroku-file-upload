@@ -1,9 +1,22 @@
 <head>
     <title>Ensumon File upload</title>
-</head>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<form action="/upload" enctype="multipart/form-data" method="POST"> 
-    <input type="file" name="file" /><br>
-    <input type="submit" value="Upload a file"/>
- </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(
+    function(){
+        $('input:file').change(
+            function(){
+                if ($(this).val()) {
+                    $('input:submit').attr('disabled',false);
+                    // or, as has been pointed out elsewhere:
+                    // $('input:submit').removeAttr('disabled'); 
+                } 
+            }
+            );
+    });
+        </script>
+<form action="/upload" enctype="multipart/form-data" method="POST">
+    <input type="file" name="file" id="fileInput" />
+    <input type="submit" value="submit" disabled />
 </form>
+<div id="result"></div>

@@ -18,8 +18,10 @@
 	<script>
 		$(function () {
 			$('input:file').change(function () {
-				if (this.value.length > 0)
-					document.getElementById('upbtn').disabled = false;
+				if (this.value.length > 0){
+                    document.getElementById('upbtn').disabled = false;
+                    document.getElementById('filename').innerHTML=this.value;
+                }
 				else
 					document.getElementById('upbtn').disabled = true;
 			});
@@ -28,16 +30,15 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $('#upbtn').on('click',function(e){ 
-                $('#result').html("")
                 e.preventDefault();
                 var formData = new FormData();
-                formData.append('file', $('input[type=file]')[0].files[0]);
+                formData.append('file', $('input[type=file]')[0].files[0]); 
                 $.ajax({
                     url: '/upload',  
                     type: 'POST',
                     data: formData,
                     success:function(data){
-                        $('#result').html(data);
+                        $('#resp').val(data)
                     },
                     cache: false,
                     contentType: false,
@@ -56,7 +57,8 @@
 	</nav>
 	<div class="jumbotron d-flex align-items-center" style="height: 100%;">
 		<div class="container" style="padding: 50px 50px 50px 50px">
-			<form action="/upload" enctype="multipart/form-data" method="POST">
+            <form action="/upload" enctype="multipart/form-data" method="POST">
+                <div style="padding: 10px 10px 10px 10px;" id="filename">Hello</div>
 				<div style="padding: 10px 10px 10px 10px;">
 					<input type="button" id="loadFileXml" value="Select File" class="btn btn-primary btn-block"
 						onclick="document.getElementById('file').click()" />
@@ -69,7 +71,7 @@
 					</button>
                 </div>
                 <div id="result" style="padding: 10px 10px 10px 10px;">
-                    <span class="textHolder" style="color: cadetblue; align-items: center;"></span>
+                    <input type="text" class="form-control" onclick="this.setSelectionRange(0, this.value.length)" id="resp" name="resp"  />
                 </div>
 
 			</form>

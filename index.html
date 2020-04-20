@@ -34,8 +34,9 @@
 						var xhr = new window.XMLHttpRequest();
 						xhr.upload.addEventListener("progress", (evt) => {
 							if (evt.lengthComputable) {
-								var percentComplete = evt.loaded / evt.total;
-								$(".progress-bar").css("width", percentComplete * 100 + "%").text(percentComplete * 100 + " %");
+								var percentComplete = (evt.loaded / evt.total);
+                                
+								$(".progress-bar").css("width", (percentComplete * 100).toFixed(2) + "%").text((percentComplete * 100).toFixed(2) + " %");
 								if (percentComplete === 1)
 									$("#result").show()
 							}

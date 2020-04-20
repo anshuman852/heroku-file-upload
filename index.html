@@ -7,105 +7,105 @@
 	<title>File Uploader</title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<style>
 		html,
 		body {
 			height: 100%;
 		}
-    </style>
-    <script type="text/javascript">
-    $(function() {
-
-var bar = $('.bar');
-var percent = $('.percent');
-var status = $('#status');
-
-$('form').ajaxForm({
-    beforeSend: function() {
-        status.empty();
-        var percentVal = '0%';
-        bar.width(percentVal);
-        percent.html(percentVal);
-    },
-    uploadProgress: function(event, position, total, percentComplete) {
-        var percentVal = percentComplete + '%';
-        bar.width(percentVal);
-        percent.html(percentVal);
-    },
-    complete: function(xhr) {
-        status.html(xhr.responseText);
-    }
-});
-}); 
-    </script>
+	</style>
 	<script>
+		function copyLink() {
+			var copyText = document.getElementById("url");
+			copyText.select();
+			copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+			document.execCommand("copy");
+
+		}
+
+		$(document).ready(() => {
+			$("#result").hide()
+			$("#upload-form").submit((event) => {
+				event.preventDefault();
+				var form = $("#upload-form");
+				var formData = new FormData(form[0]);
+				$.ajax({
+					xhr: () => {
+						var xhr = new window.XMLHttpRequest();
+						xhr.upload.addEventListener("progress", (evt) => {
+							if (evt.lengthComputable) {
+								var percentComplete = evt.loaded / evt.total;
+								$(".progress-bar").css("width", percentComplete * 100 + "%").text(percentComplete * 100 + " %");
+								if (percentComplete === 1)
+									$("#result").show()
+							}
+						}, false);
+						return xhr;
+					},
+					method: 'post',
+					url: '/upload',
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: (data) => {
+						$('#url').val(data)
+					}
+
+				})
+			});
+		});
 		$(function () {
 			$('input:file').change(function () {
-				if (this.value.length > 0){
-                    document.getElementById('upbtn').disabled = false;
-                    document.getElementById('filename').innerHTML=this.value;
-                }
+				if (this.value.length > 0) {
+					document.getElementById('upbtn').disabled = false;
+					$('#loadFileXml').val(document.getElementById('file').files[0].name)
+				}
+
 				else
 					document.getElementById('upbtn').disabled = true;
 			});
 		});
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#upbtn').on('click',function(e){ 
-                e.preventDefault();
-                var formData = new FormData();
-                formData.append('file', $('input[type=file]')[0].files[0]); 
-                $.ajax({
-                    url: '/upload',  
-                    type: 'POST',
-                    data: formData,
-                    success:function(data){
-                        $('#resp').val(data)
-                    },
-                    cache: false,
-                    contentType: false,
-                    processData: false
-                });
-            });
-        });
-        
-        
-        </script>
+	</script>
 </head>
 
 <body>
+	<!-- nav bar  -->
 	<nav class="navbar navbar-dark bg-dark">
 		<a class="navbar-brand font-weight-bold" href="#">Heroku File Uploader</a>
 	</nav>
+
+	<!-- app body  -->
 	<div class="jumbotron d-flex align-items-center" style="height: 100%;">
 		<div class="container" style="padding: 50px 50px 50px 50px">
-            <form action="/upload" enctype="multipart/form-data" method="POST">
-                <div style="padding: 10px 10px 10px 10px;" id="filename">Hello</div>
-				<div style="padding: 10px 10px 10px 10px;">
+
+			<form id="upload-form" enctype="multipart/form-data" method="POST">
+				<!-- file select elements -->
+				<div style="padding: 10px;">
 					<input type="button" id="loadFileXml" value="Select File" class="btn btn-primary btn-block"
 						onclick="document.getElementById('file').click()" />
 					<input type="file" style="display: none;" id="file" name="file" />
 				</div>
-				<div style="padding: 10px 10px 10px 10px;">
+
+				<!-- file upload button -->
+				<div style="padding: 10px;">
 					<button type="submit" id="upbtn" class="btn btn-danger btn-block" disabled="true"
 						value="Upload a file">
 						Upload File
 					</button>
-                </div>
-                <div id="result" style="padding: 10px 10px 10px 10px;">
-                    <input type="text" class="form-control" onclick="this.setSelectionRange(0, this.value.length)" id="resp" name="resp"  />
-                </div>
+				</div>
+				<div class="progress" style="margin: 10px 10px 10px 10px;">
+					<div class="progress-bar progress-bar-striped bg-success active" role="progressbar"
+						aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+						0%
+					</div>
+				</div>
+				<div class="row" id="result" style="margin: 10px ;">
+					<input type="text" class="form-control" id="url">
+					<button style="margin-top: 10px;" class="btn btn-secondary" type="button" onclick="copyLink()">Copy
+						text</button>
+				</div>
 
-            </form>
-            <div class="progress">
-                <div class="bar"></div >
-                <div class="percent">0%</div >
-            </div>
-            
-            <div id="status"></div>
+			</form>
 		</div>
 	</div>
 

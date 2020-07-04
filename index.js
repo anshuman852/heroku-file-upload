@@ -5,6 +5,8 @@ const multer = require('multer')
 const path = require('path')
 const bodyParser = require("body-parser")
 var fs = require('fs')
+const request=require('request')
+
 const router = express.Router()
 
 app.use(bodyParser.urlencoded({
@@ -41,6 +43,13 @@ app.post('/upload', uploads.single('file'), function (req, res) {
 var uploads = multer({ storage: storage });
 app.use(express.static("files"));
 app.get("/", (req, res) => res.sendFile(path.join(__dirname+'/index.html')));
+app.get("/file",(req,res) =>{
+  url=req.query.url
+  rend = Randomstring.generate(7)
+  ext=get_url_extension(url)
+  res.header('Content-Disposition', `attachment; filename="${rend}.${ext}"`);
+  request.get(url).pipe(res)
+});
 app.post("/upload", uploads.single("file"), function (req, res) {
   baseurl = "https://rekt-files.herokuapp.com/";
   res.send(baseurl + res.req.file.filename);
@@ -51,3 +60,6 @@ app.use("/",router)
 app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 )
+function get_url_extension( url ) {
+  return url.split(/[#?]/)[0].split('.').pop().trim();
+}

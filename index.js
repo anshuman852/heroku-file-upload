@@ -37,7 +37,7 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname + '/index.html')))
 
 app.post('/upload', uploads.single('file'), function (req, res) {
   baseurl = 'https://rekt-files.herokuapp.com/'
-  res.send(baseurl + res.req.file.filename)
+  res.send(encodeURI(baseurl + res.req.file.filename));
 })
 
 var uploads = multer({ storage: storage });
@@ -49,10 +49,6 @@ app.get("/file",(req,res) =>{
   ext=get_url_extension(url)
   res.header('Content-Disposition', `attachment; filename="${rend}.${ext}"`);
   request.get(url).pipe(res)
-});
-app.post("/upload", uploads.single("file"), function (req, res) {
-  baseurl = "https://rekt-files.herokuapp.com/";
-  res.send(baseurl + res.req.file.filename);
 });
 app.get("/upload", (req, res) => res.sendFile(path.join(__dirname+'/index.html')));
 port = process.env.PORT || 8080;

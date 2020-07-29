@@ -21,6 +21,7 @@ const Files = sequelize.define("Files", {
   fileid: {
     type: DataTypes.STRING,
     primaryKey: true,
+    unique:true,
     allowNull: false,
   },
   filelink: {

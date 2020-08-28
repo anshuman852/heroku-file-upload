@@ -49,7 +49,7 @@ var storage = multer.diskStorage({
     const feel = await Files.create({
       fileid: rend,
       filelink:
-        "https://rekt-files.herokuapp.com/" +
+        "https://i.anshuman852.dev/" +
         rend +
         "/" +
         file.originalname,
@@ -63,7 +63,7 @@ app.use(express.static("files"));
 app.get("/", (req, res) => res.sendFile(path.join(__dirname + "/index.html")));
 
 app.post("/upload", uploads.single("file"), function (req, res) {
-  baseurl = "https://rekt-files.herokuapp.com/";
+  baseurl = "https://i.anshuman852.dev/";
   res.send(encodeURI(baseurl + "dl/" + rend));
 });
 app.get("/dl/:id", async (req, res) => {
